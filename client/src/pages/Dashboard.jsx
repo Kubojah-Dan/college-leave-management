@@ -6,8 +6,9 @@ import {
 } from 'lucide-react'
 import {
   ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend,
-  BarChart, Bar, XAxis, YAxis, CartesianGrid,
-  LineChart, Line, AreaChart, Area, RadialBarChart, RadialBar
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, ComposedChart,
+  LineChart, Line, AreaChart, Area, RadialBarChart, RadialBar,
+  RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar
 } from 'recharts'
 import { useAuth } from '../context/AuthContext'
 import api from '../services/api'
@@ -27,12 +28,16 @@ const STATUS_COLORS = {
 function ChartTip({ active, payload, label }) {
   if (!active || !payload?.length) return null
   return (
-    <div className="bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 shadow-xl text-xs">
-      {label && <p className="text-slate-400 mb-1 font-medium">{label}</p>}
+    <div className="bg-white/80 backdrop-blur-xl border border-white/50 rounded-xl px-4 py-3 shadow-2xl text-xs" style={{ boxShadow: '0 20px 40px rgba(0,0,0,0.1)' }}>
+      {label && <p className="text-slate-800 font-bold mb-2 uppercase tracking-widest">{label}</p>}
       {payload.map((p, i) => (
-        <p key={i} style={{ color: p.color || p.fill }} className="font-semibold">
-          {p.name}: {p.value}
-        </p>
+        <div key={i} className="flex items-center gap-2 mt-1">
+          <div className="w-2.5 h-2.5 rounded-full shadow-sm" style={{ backgroundColor: p.color || p.fill }} />
+          <p className="text-slate-600 font-semibold flex-1">
+            {p.name}
+          </p>
+          <span className="text-slate-900 font-extrabold">{p.value}</span>
+        </div>
       ))}
     </div>
   )
@@ -41,7 +46,7 @@ function ChartTip({ active, payload, label }) {
 // ── Chart card wrapper ───────────────────────────────────────────────────────
 function ChartCard({ title, subtitle, children, className = '' }) {
   return (
-    <div className={`bg-white rounded-2xl shadow-sm border border-slate-100 p-5 ${className}`}>
+    <div className={`dashboard-glass-card rounded-2xl p-5 ${className}`}>
       <div className="mb-4">
         <h3 className="text-sm font-semibold text-slate-800">{title}</h3>
         {subtitle && <p className="text-xs text-slate-400 mt-0.5">{subtitle}</p>}
@@ -54,11 +59,11 @@ function ChartCard({ title, subtitle, children, className = '' }) {
 // ── Stat card ────────────────────────────────────────────────────────────────
 function StatCard({ label, value, icon: Icon, from, to }) {
   return (
-    <div className="rounded-2xl p-5 text-white shadow-lg relative overflow-hidden" style={{ background: `linear-gradient(135deg, ${from}, ${to})` }}>
+    <div className="stat-card-glass rounded-2xl p-5 text-white shadow-lg relative overflow-hidden" style={{ background: `linear-gradient(135deg, ${from}dd, ${to}cc)` }}>
       <div className="absolute -right-4 -top-4 w-20 h-20 rounded-full bg-white/10" />
       <div className="absolute -right-2 -bottom-6 w-28 h-28 rounded-full bg-white/5" />
       <div className="relative">
-        <div className="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center mb-3">
+        <div className="icon-glass w-9 h-9 rounded-xl flex items-center justify-center mb-3">
           <Icon size={18} className="text-white" />
         </div>
         <p className="text-3xl font-extrabold">{value ?? '—'}</p>
@@ -281,7 +286,6 @@ function AdminDashboard({ stats, leaves }) {
   const monthlyTrend = buildMonthlyTrend(leaves)
   const typeData = buildTypeData(leaves)
 
-  // Per-department data
   const deptMap = {}
   leaves.forEach(l => {
     const dept = l.student?.department?.name || 'Unknown'
@@ -447,7 +451,7 @@ export default function Dashboard() {
       {['admin', 'principal'].includes(user?.role) && <AdminDashboard stats={stats} leaves={leaves} />}
 
       {/* Recent Leaves */}
-      <div className="card">
+      <div className="dashboard-glass-card rounded-2xl p-5">
         <div className="flex items-center justify-between mb-5">
           <h2 className="text-base font-semibold text-slate-800">Recent Leave Requests</h2>
           <Link
@@ -473,21 +477,25 @@ export default function Dashboard() {
             <table className="table">
               <thead>
                 <tr>
-                  {['admin', 'hod', 'principal'].includes(user?.role) && <th>Student</th>}
-                  <th>Type</th><th>From</th><th>To</th><th>Days</th><th>Status</th>
+                  {['admin', 'hod', 'principal'].includes(user?.role) && <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 bg-slate-50/50 uppercase tracking-wider border-b border-slate-100">Student</th>}
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 bg-slate-50/50 uppercase tracking-wider border-b border-slate-100">Type</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 bg-slate-50/50 uppercase tracking-wider border-b border-slate-100">From</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 bg-slate-50/50 uppercase tracking-wider border-b border-slate-100">To</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 bg-slate-50/50 uppercase tracking-wider border-b border-slate-100">Days</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 bg-slate-50/50 uppercase tracking-wider border-b border-slate-100">Status</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-slate-100">
                 {recent.map(l => (
-                  <tr key={l.id}>
+                  <tr key={l.id} className="hover:bg-slate-50 transition-colors">
                     {['admin', 'hod', 'principal'].includes(user?.role) && (
-                      <td className="font-medium">{l.student?.firstName} {l.student?.lastName}</td>
+                      <td className="px-4 py-3 text-slate-700 text-sm font-medium">{l.student?.firstName} {l.student?.lastName}</td>
                     )}
-                    <td>{l.leaveType}</td>
-                    <td>{l.startDate}</td>
-                    <td>{l.endDate}</td>
-                    <td><span className="font-semibold text-slate-700">{l.totalDays}d</span></td>
-                    <td><StatusBadge status={l.status} /></td>
+                    <td className="px-4 py-3 text-slate-500 text-sm">{l.leaveType}</td>
+                    <td className="px-4 py-3 text-slate-500 text-sm">{l.startDate}</td>
+                    <td className="px-4 py-3 text-slate-500 text-sm">{l.endDate}</td>
+                    <td className="px-4 py-3 text-slate-500 text-sm"><span className="font-semibold text-slate-700">{l.totalDays}d</span></td>
+                    <td className="px-4 py-3 text-slate-500 text-sm"><StatusBadge status={l.status} /></td>
                   </tr>
                 ))}
               </tbody>
@@ -499,8 +507,8 @@ export default function Dashboard() {
       {/* Admin quick links */}
       {user?.role === 'admin' && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Link to="/app/users" className="card-hover flex items-center gap-4 group">
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg,#a855f7,#7c3aed)' }}>
+          <Link to="/app/users" className="dashboard-glass-card rounded-2xl p-5 flex items-center gap-4 group">
+            <div className="icon-glass w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg,#a855f7,#7c3aed)' }}>
               <Users size={22} className="text-white" />
             </div>
             <div>
@@ -509,8 +517,8 @@ export default function Dashboard() {
             </div>
             <ChevronRight size={18} className="text-slate-400 ml-auto group-hover:translate-x-1 transition-transform" />
           </Link>
-          <Link to="/app/departments" className="card-hover flex items-center gap-4 group">
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg,#06b6d4,#0891b2)' }}>
+          <Link to="/app/departments" className="dashboard-glass-card rounded-2xl p-5 flex items-center gap-4 group">
+            <div className="icon-glass w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg,#06b6d4,#0891b2)' }}>
               <Building2 size={22} className="text-white" />
             </div>
             <div>

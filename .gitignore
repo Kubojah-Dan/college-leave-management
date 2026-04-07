@@ -9,3 +9,6 @@ pakage-lock.json
 dist/
 build/
 coverage/
+tests/
+DEPLOYMENT.md
+client/test-results/

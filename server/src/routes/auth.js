@@ -18,8 +18,9 @@ const SECRET = process.env.JWT_SECRET || 'dev_jwt_secret';
 // POST /api/auth/register
 router.post('/register', async (req, res) => {
   try {
-    const { email, password, firstName, lastName, phone, role, departmentId, sectionId } = req.body;
-    if (!email || !password || !firstName) return res.status(400).json({ message: 'Missing required fields' });
+    const { email: rawEmail, password, firstName, lastName, phone, role, departmentId, sectionId } = req.body;
+    if (!rawEmail || !password || !firstName) return res.status(400).json({ message: 'Missing required fields' });
+    const email = rawEmail.toLowerCase();
     if (await User.findOne({ where: { email } })) return res.status(400).json({ message: 'Email already registered' });
     const passwordHash = await bcrypt.hash(password, 10);
     const user = await User.create({
@@ -39,8 +40,9 @@ router.post('/register', async (req, res) => {
 // POST /api/auth/login
 router.post('/login', async (req, res) => {
   try {
-    const { email, password } = req.body;
-    if (!email || !password) return res.status(400).json({ message: 'Missing fields' });
+    const { email: rawEmail, password } = req.body;
+    if (!rawEmail || !password) return res.status(400).json({ message: 'Missing fields' });
+    const email = rawEmail.toLowerCase();
     const user = await User.findOne({ where: { email }, include: [{ association: 'department' }, { association: 'section' }] });
     if (!user || !user.isActive) return res.status(400).json({ message: 'Invalid credentials' });
     if (!await bcrypt.compare(password, user.passwordHash)) return res.status(400).json({ message: 'Invalid credentials' });

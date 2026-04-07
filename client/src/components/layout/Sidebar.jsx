@@ -38,10 +38,7 @@ const NAV = {
   ],
 }
 
-const sidebarBg = {
-  background: 'linear-gradient(180deg, #0f172a 0%, #1e1b4b 100%)',
-  borderRight: '1px solid rgba(255,255,255,0.07)',
-}
+const sidebarBg = {} // Left empty to use the sidebar-glass class on aside elements
 
 export default function Sidebar({ unreadCount = 0 }) {
   const { user, logout } = useAuth()
@@ -124,23 +121,22 @@ export default function Sidebar({ unreadCount = 0 }) {
             onClick={() => setMobileOpen(false)}
             title={mini ? label : undefined}
             className={({ isActive }) =>
-              `relative flex items-center gap-3 rounded-xl text-sm font-medium transition-all duration-200 ${mini ? 'justify-center px-2 py-2.5' : 'px-3 py-2.5'} ${
+              `sidebar-nav-item relative flex items-center gap-3 rounded-xl text-sm font-medium transition-all duration-200 ${mini ? 'justify-center px-2 py-2.5' : 'px-3 py-2.5'} ${
                 isActive
-                  ? 'bg-white/15 text-white shadow-sm border border-white/10'
-                  : 'text-white/50 hover:bg-white/8 hover:text-white/90'
+                  ? 'sidebar-active-glow text-white shadow-xl'
+                  : 'text-white/50 hover:text-white/90 hover:bg-white/5'
               }`
             }
           >
             <Icon size={17} className="flex-shrink-0" />
             {!mini && <span className="flex-1">{label}</span>}
             {!mini && label === 'Notifications' && unreadCount > 0 && (
-              <span className="text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold text-white"
-                style={{ background: 'linear-gradient(135deg,#ef4444,#dc2626)' }}>
+              <span className="text-xs font-bold w-5 h-5 flex items-center justify-center text-white bg-red-500 rounded-full shadow-md">
                 {unreadCount > 9 ? '9+' : unreadCount}
               </span>
             )}
             {mini && label === 'Notifications' && unreadCount > 0 && (
-              <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-red-500" />
+              <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-red-500 shadow-md" />
             )}
           </NavLink>
         ))}
@@ -177,16 +173,14 @@ export default function Sidebar({ unreadCount = 0 }) {
 
       {/* Mobile sidebar */}
       <aside
-        className={`lg:hidden fixed left-0 top-0 h-full w-64 z-40 shadow-2xl transition-transform duration-300 ${mobileOpen ? 'translate-x-0' : '-translate-x-full'}`}
-        style={sidebarBg}
+        className={`lg:hidden fixed left-0 top-0 h-full w-64 z-50 shadow-2xl transition-transform duration-300 sidebar-glass ${mobileOpen ? 'translate-x-0' : '-translate-x-full'}`}
       >
         <SidebarContent mini={false} />
       </aside>
 
       {/* Desktop sidebar — collapsible */}
       <aside
-        className={`hidden lg:flex flex-col h-screen sticky top-0 flex-shrink-0 transition-all duration-300 ${collapsed ? 'w-16' : 'w-64'}`}
-        style={sidebarBg}
+        className={`hidden lg:flex flex-col h-screen sticky top-0 flex-shrink-0 transition-all duration-300 sidebar-glass ${collapsed ? 'w-16' : 'w-64'}`}
       >
         <SidebarContent mini={collapsed} />
       </aside>

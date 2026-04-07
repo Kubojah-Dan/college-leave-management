@@ -35,11 +35,11 @@ export default function Layout() {
   })
 
   return (
-    <div className="flex min-h-screen bg-slate-50">
+    <div className="flex min-h-screen dashboard-layout-bg text-slate-800">
       <Toaster position="top-right" />
       <Sidebar unreadCount={unreadCount} />
       <main className="flex-1 min-w-0 overflow-auto">
-        <div className="p-6 lg:p-8 max-w-7xl mx-auto animate-fade-in">
+        <div className="p-6 lg:p-8 max-w-7xl mx-auto animate-fade-in relative z-10">
           <Outlet context={{ refreshUnread: fetchUnread }} />
         </div>
       </main>
