@@ -3,7 +3,15 @@ const { Sequelize, DataTypes } = require('sequelize');
 
 let sequelize;
 if (process.env.DATABASE_URL) {
-  sequelize = new Sequelize(process.env.DATABASE_URL, { logging: false });
+  sequelize = new Sequelize(process.env.DATABASE_URL, {
+    logging: false,
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false
+      }
+    }
+  });
 } else {
   const storage = path.join(__dirname, '..', '..', 'data', 'server.sqlite');
   sequelize = new Sequelize({ dialect: 'sqlite', storage, logging: false });

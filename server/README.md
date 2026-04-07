@@ -23,3 +23,7 @@ npm run dev
 ```
 
 API base: `http://localhost:4000/api`
+
+Notes
+ - For production use a managed Postgres DB and set `DATABASE_URL` in your environment.
+ - On Render, create a Postgres instance and add the provided `DATABASE_URL` to your Web Service environment variables. The app will use that automatically.

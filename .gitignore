@@ -12,3 +12,6 @@ coverage/
 tests/
 DEPLOYMENT.md
 client/test-results/
+# Ignore server sqlite DB and server env
+server/data/*.sqlite
+server/.env
