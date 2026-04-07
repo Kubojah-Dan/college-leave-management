@@ -82,24 +82,25 @@ export default function Settings() {
   return (
     <div className="max-w-3xl mx-auto space-y-6 animate-slide-up">
       <div>
-        <h1 className="text-2xl font-bold text-slate-800">Settings</h1>
-        <p className="text-slate-500 text-sm mt-1">Manage your profile and system configuration</p>
-        <div className="mt-2 h-1 w-12 rounded-full" style={{ background: 'linear-gradient(90deg,#6366f1,#8b5cf6)' }} />
+        <h1 className="section-title">
+          <span className="section-title-accent">Settings</span>
+        </h1>
+        <p className="text-slate-500 text-sm mt-3">Manage your profile and system configuration</p>
       </div>
 
       {/* Profile Hero Card */}
-      <div className="rounded-2xl overflow-hidden shadow-sm border border-slate-100">
+      <div className="dashboard-glass-card rounded-2xl overflow-hidden p-0">
         {/* Banner */}
-        <div className="h-28 relative" style={{ background: `linear-gradient(135deg, ${roleColor}22, ${roleColor}44), linear-gradient(135deg, #0f172a, #1e1b4b)` }}>
+        <div className="h-32 relative" style={{ background: `linear-gradient(135deg, ${roleColor}33, ${roleColor}11), linear-gradient(135deg, #1e293b, #312e81)` }}>
           <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(255,255,255,0.15) 0%, transparent 60%), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%)' }} />
         </div>
 
         {/* Avatar + info row */}
-        <div className="bg-white px-6 pb-6">
-          <div className="flex items-end gap-5 -mt-12 mb-5">
+        <div className="bg-white/80 backdrop-blur-xl px-6 pb-6 pt-0">
+          <div className="flex items-end gap-5 -mt-14 mb-5">
             {/* Avatar */}
             <div className="relative flex-shrink-0">
-              <div className="w-24 h-24 rounded-2xl border-4 border-white shadow-lg overflow-hidden" style={{ background: `linear-gradient(135deg, ${roleColor}, ${roleColor}99)` }}>
+              <div className="w-24 h-24 rounded-2xl border-4 border-white shadow-xl overflow-hidden" style={{ background: `linear-gradient(135deg, ${roleColor}, ${roleColor}99)` }}>
                 {avatarPreview ? (
                   <img src={avatarPreview} alt="avatar" className="w-full h-full object-cover" />
                 ) : (
@@ -109,8 +110,8 @@ export default function Settings() {
               <button
                 onClick={() => fileRef.current?.click()}
                 disabled={avatarUploading}
-                className="absolute -bottom-1 -right-1 w-8 h-8 rounded-xl flex items-center justify-center shadow-md border-2 border-white transition-transform hover:scale-110"
-                style={{ background: `linear-gradient(135deg, #6366f1, #8b5cf6)` }}
+                className="absolute -bottom-1 -right-1 w-8 h-8 rounded-xl flex items-center justify-center shadow-lg border-2 border-white transition-transform hover:scale-110"
+                style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}
                 title="Change photo"
               >
                 {avatarUploading
@@ -124,7 +125,7 @@ export default function Settings() {
             <div className="pb-1 flex-1 min-w-0">
               <h2 className="text-xl font-bold text-slate-800 truncate">{user?.firstName} {user?.lastName}</h2>
               <div className="flex items-center gap-2 mt-1 flex-wrap">
-                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold text-white capitalize" style={{ background: roleColor }}>
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold text-white capitalize shadow-md" style={{ background: roleColor }}>
                   <Shield size={10} />{user?.role}
                 </span>
                 <span className="text-xs text-slate-400 flex items-center gap-1"><Mail size={11} />{user?.email}</span>
@@ -139,10 +140,10 @@ export default function Settings() {
               { label: 'Section', value: user?.section?.name || '—', icon: '📚' },
               { label: 'Phone', value: user?.phone || '—', icon: '📱' },
             ].map(s => (
-              <div key={s.label} className="bg-slate-50 rounded-xl p-3 border border-slate-100">
+              <div key={s.label} className="bg-gradient-to-br from-slate-50 to-white rounded-xl p-3 border border-slate-100 shadow-sm">
                 <p className="text-lg leading-none mb-1">{s.icon}</p>
                 <p className="text-xs text-slate-400 font-medium">{s.label}</p>
-                <p className="text-sm font-semibold text-slate-700 truncate mt-0.5">{s.value}</p>
+                <p className="text-sm font-bold text-slate-700 truncate mt-0.5">{s.value}</p>
               </div>
             ))}
           </div>
@@ -152,8 +153,8 @@ export default function Settings() {
             {profileError && <Alert type="error" message={profileError} />}
 
             <div className="flex items-center gap-2 mb-1">
-              <User size={15} className="text-slate-400" />
-              <p className="text-sm font-semibold text-slate-700">Personal Info</p>
+              <User size={15} className="text-indigo-500" />
+              <p className="text-sm font-bold text-slate-700">Personal Info</p>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div><label className="label">First Name</label><input className="input" value={profileForm.firstName} onChange={e => setProfileForm(f => ({ ...f, firstName: e.target.value }))} /></div>
@@ -165,7 +166,7 @@ export default function Settings() {
             </div>
 
             <div className="border-t border-slate-100 pt-4">
-              <div className="flex items-center gap-2 mb-3"><Key size={14} className="text-slate-400" /><p className="text-sm font-semibold text-slate-700">Change Password</p></div>
+              <div className="flex items-center gap-2 mb-3"><Key size={14} className="text-indigo-500" /><p className="text-sm font-bold text-slate-700">Change Password</p></div>
               <div className="grid grid-cols-2 gap-3">
                 <div><label className="label">New Password</label><input className="input" type="password" value={profileForm.password} onChange={e => setProfileForm(f => ({ ...f, password: e.target.value }))} placeholder="Leave blank to keep" /></div>
                 <div><label className="label">Confirm Password</label><input className="input" type="password" value={profileForm.confirmPassword} onChange={e => setProfileForm(f => ({ ...f, confirmPassword: e.target.value }))} /></div>
@@ -179,25 +180,27 @@ export default function Settings() {
 
       {/* Leave Types (admin only) */}
       {user?.role === 'admin' && (
-        <div className="card space-y-4">
+        <div className="dashboard-glass-card space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <SettingsIcon size={18} className="text-primary-600" />
-              <h2 className="font-semibold text-slate-800">Leave Types</h2>
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center">
+                <SettingsIcon size={16} className="text-white" />
+              </div>
+              <h2 className="font-bold text-slate-800">Leave Types</h2>
             </div>
             <button className="btn-primary btn-sm" onClick={openCreate}><Plus size={14} />Add Type</button>
           </div>
           <div className="space-y-2">
             {leaveTypes.map(lt => (
-              <div key={lt.id} className="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-100">
-                <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: lt.colorCode }} />
+              <div key={lt.id} className="flex items-center gap-3 p-4 bg-slate-50/50 rounded-xl border border-slate-100 hover:border-indigo-200 hover:bg-indigo-50/30 transition-all">
+                <div className="w-4 h-4 rounded-full flex-shrink-0 shadow-md" style={{ backgroundColor: lt.colorCode }} />
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-slate-800">{lt.name}</p>
+                  <p className="text-sm font-bold text-slate-800">{lt.name}</p>
                   <p className="text-xs text-slate-500">Max {lt.maxDays} days · {lt.requiresDocument ? 'Document required' : 'No document needed'}</p>
                 </div>
                 <div className="flex items-center gap-1">
-                  <button onClick={() => openEdit(lt)} className="p-1.5 rounded-lg hover:bg-white text-slate-500 hover:text-slate-700 transition-colors"><Edit2 size={13} /></button>
-                  <button onClick={() => deleteLt(lt.id)} className="p-1.5 rounded-lg hover:bg-red-50 text-slate-500 hover:text-red-600 transition-colors"><Trash2 size={13} /></button>
+                  <button onClick={() => openEdit(lt)} className="p-2 rounded-lg bg-slate-100 hover:bg-indigo-50 text-slate-500 hover:text-indigo-600 transition-all"><Edit2 size={13} /></button>
+                  <button onClick={() => deleteLt(lt.id)} className="p-2 rounded-lg bg-slate-100 hover:bg-red-50 text-slate-500 hover:text-red-600 transition-all"><Trash2 size={13} /></button>
                 </div>
               </div>
             ))}

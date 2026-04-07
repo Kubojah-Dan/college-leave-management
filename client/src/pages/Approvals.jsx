@@ -69,20 +69,19 @@ export default function Approvals() {
   return (
     <div className="space-y-6 animate-slide-up">
       <div>
-        <h1 className="text-2xl font-bold text-slate-800">
-          {user?.role === 'admin' ? 'All Leave Requests' : 'Leave Approvals'}
+        <h1 className="section-title">
+          <span className="section-title-accent">
+            {user?.role === 'admin' ? 'All Leave Requests' : 'Leave Approvals'}
+          </span>
         </h1>
-        <p className="text-slate-500 text-sm mt-1">{leaves.length} record{leaves.length !== 1 ? 's' : ''}</p>
-        <div className="mt-2 h-1 w-12 rounded-full" style={{ background: 'linear-gradient(90deg,#6366f1,#8b5cf6)' }} />
+        <p className="text-slate-500 text-sm mt-3">{leaves.length} record{leaves.length !== 1 ? 's' : ''}</p>
       </div>
 
-      {/* Filters */}
-      <div className="flex items-center gap-2 flex-wrap">
+      <div className="flex items-center gap-3 flex-wrap">
         <Filter size={16} className="text-slate-400" />
         {STATUSES.map(s => (
           <button key={s} onClick={() => setFilter(s)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 ${filter === s ? 'text-white shadow-md' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'}`}
-            style={filter === s ? { background: 'linear-gradient(135deg,#6366f1,#8b5cf6)' } : {}}>
+            className={`filter-pill ${filter === s ? 'filter-pill-active' : ''}`}>
             {s === '' ? 'All' : s.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase())}
           </button>
         ))}
@@ -91,72 +90,70 @@ export default function Approvals() {
       {loading ? <PageLoader /> : leaves.length === 0 ? (
         <EmptyState icon={FileText} title="No leave requests" description="No requests match the selected filter." />
       ) : (
-        <div className="card p-0 overflow-hidden">
-          <div className="table-wrapper">
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Student</th>
-                  <th>Department</th>
-                  <th>Type</th>
-                  <th>Dates</th>
-                  <th>Days</th>
-                  <th>Status</th>
-                  <th>Actions</th>
+        <div className="table-modern-wrapper">
+          <table className="table-modern">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Student</th>
+                <th>Department</th>
+                <th>Type</th>
+                <th>Dates</th>
+                <th>Days</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {leaves.map(l => (
+                <tr key={l.id}>
+                  <td className="text-slate-400 text-xs font-mono">#{l.id}</td>
+                  <td>
+                    <div className="font-semibold text-slate-800">{l.student?.firstName} {l.student?.lastName}</div>
+                    <div className="text-xs text-slate-400">{l.student?.email}</div>
+                  </td>
+                  <td>
+                    <p className="text-sm text-slate-700 font-medium">{l.student?.department?.name || '—'}</p>
+                    <p className="text-xs text-slate-400">{l.student?.section?.name || ''}</p>
+                  </td>
+                  <td>
+                    <span className="font-semibold text-slate-700">{l.leaveType}</span>
+                    {l.documents?.length > 0 && (
+                      <span className="ml-2 text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">📎{l.documents.length}</span>
+                    )}
+                  </td>
+                  <td className="text-xs">
+                    <p className="font-medium">{l.startDate}</p>
+                    <p className="text-slate-400">to {l.endDate}</p>
+                  </td>
+                  <td><span className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white px-3 py-1 rounded-lg text-xs font-bold">{l.totalDays}d</span></td>
+                  <td><StatusBadge status={l.status} /></td>
+                  <td>
+                    <div className="flex items-center gap-1">
+                      <button onClick={() => setViewLeave(l)} className="p-2 rounded-lg bg-slate-100 hover:bg-indigo-50 text-slate-500 hover:text-indigo-600 transition-all" title="View">
+                        <Eye size={15} />
+                      </button>
+                      <button onClick={() => downloadPDF(l.id)} className="p-2 rounded-lg bg-slate-100 hover:bg-blue-50 text-slate-500 hover:text-blue-600 transition-all" title="PDF">
+                        <Download size={15} />
+                      </button>
+                      {canAct(l) && (
+                        <>
+                          <button onClick={() => { setActionLeave(l); setActionType('approve'); setRemarks('') }}
+                            className="p-2 rounded-lg bg-slate-100 hover:bg-emerald-50 text-slate-500 hover:text-emerald-600 transition-all" title="Approve">
+                            <CheckCircle size={15} />
+                          </button>
+                          <button onClick={() => { setActionLeave(l); setActionType('reject'); setRemarks('') }}
+                            className="p-2 rounded-lg bg-slate-100 hover:bg-red-50 text-slate-500 hover:text-red-600 transition-all" title="Reject">
+                            <XCircle size={15} />
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {leaves.map(l => (
-                  <tr key={l.id}>
-                    <td className="text-slate-400 text-xs">#{l.id}</td>
-                    <td>
-                      <div>
-                        <p className="font-medium text-slate-800">{l.student?.firstName} {l.student?.lastName}</p>
-                        <p className="text-xs text-slate-400">{l.student?.email}</p>
-                      </div>
-                    </td>
-                    <td>
-                      <p className="text-sm">{l.student?.department?.name || '—'}</p>
-                      <p className="text-xs text-slate-400">{l.student?.section?.name || ''}</p>
-                    </td>
-                    <td>
-                      <span className="font-medium">{l.leaveType}</span>
-                      {l.documents?.length > 0 && <span className="ml-1 text-xs text-slate-400">📎{l.documents.length}</span>}
-                    </td>
-                    <td className="text-xs">
-                      <p>{l.startDate}</p>
-                      <p className="text-slate-400">to {l.endDate}</p>
-                    </td>
-                    <td className="font-medium">{l.totalDays}d</td>
-                    <td><StatusBadge status={l.status} /></td>
-                    <td>
-                      <div className="flex items-center gap-1">
-                        <button onClick={() => setViewLeave(l)} className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition-colors" title="View">
-                          <Eye size={15} />
-                        </button>
-                        <button onClick={() => downloadPDF(l.id)} className="p-1.5 rounded-lg hover:bg-blue-50 text-slate-500 hover:text-blue-600 transition-colors" title="PDF">
-                          <Download size={15} />
-                        </button>
-                        {canAct(l) && (
-                          <>
-                            <button onClick={() => { setActionLeave(l); setActionType('approve'); setRemarks('') }}
-                              className="p-1.5 rounded-lg hover:bg-emerald-50 text-slate-500 hover:text-emerald-600 transition-colors" title="Approve">
-                              <CheckCircle size={15} />
-                            </button>
-                            <button onClick={() => { setActionLeave(l); setActionType('reject'); setRemarks('') }}
-                              className="p-1.5 rounded-lg hover:bg-red-50 text-slate-500 hover:text-red-600 transition-colors" title="Reject">
-                              <XCircle size={15} />
-                            </button>
-                          </>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
 

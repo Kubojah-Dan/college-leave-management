@@ -68,11 +68,14 @@ export default function Departments() {
     <div className="space-y-6 animate-slide-up">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800">Departments</h1>
-          <p className="text-slate-500 text-sm mt-1">{departments.length} departments</p>
-          <div className="mt-2 h-1 w-12 rounded-full" style={{ background: 'linear-gradient(90deg,#6366f1,#8b5cf6)' }} />
+          <h1 className="section-title">
+            <span className="section-title-accent">Departments</span>
+          </h1>
+          <p className="text-slate-500 text-sm mt-3">{departments.length} departments</p>
         </div>
-        <button className="btn-primary" onClick={openCreate}><Plus size={16} />Add Department</button>
+        <button className="btn-primary px-5 py-2.5 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5" onClick={openCreate}>
+          <Plus size={16} />Add Department
+        </button>
       </div>
 
       {loading ? <PageLoader /> : departments.length === 0 ? (
@@ -80,40 +83,40 @@ export default function Departments() {
       ) : (
         <div className="space-y-3">
           {departments.map(d => (
-            <div key={d.id} className="card p-0 overflow-hidden">
-              <div className="flex items-center gap-4 p-4 cursor-pointer hover:bg-slate-50 transition-colors" onClick={() => toggle(d.id)}>
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(135deg,#6366f1,#8b5cf6)' }}>
-                  <Building2 size={18} className="text-white" />
+            <div key={d.id} className="dashboard-glass-card rounded-2xl p-0 overflow-hidden">
+              <div className="flex items-center gap-4 p-5 cursor-pointer hover:bg-indigo-50/30 transition-all" onClick={() => toggle(d.id)}>
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg" style={{ background: 'linear-gradient(135deg,#6366f1,#8b5cf6)' }}>
+                  <Building2 size={20} className="text-white" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <p className="font-semibold text-slate-800">{d.name}</p>
-                    <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-mono">{d.code}</span>
+                    <p className="font-bold text-slate-800 text-lg">{d.name}</p>
+                    <span className="text-xs bg-gradient-to-r from-indigo-500 to-purple-500 text-white px-3 py-1 rounded-full font-mono font-semibold shadow-md">{d.code}</span>
                   </div>
-                  <p className="text-xs text-slate-500 mt-0.5">
-                    HOD: {d.hod ? `${d.hod.firstName} ${d.hod.lastName}` : 'Not assigned'} · {d.sections?.length || 0} sections
+                  <p className="text-sm text-slate-500 mt-1">
+                    <span className="font-medium">HOD:</span> {d.hod ? `${d.hod.firstName} ${d.hod.lastName}` : 'Not assigned'} · <span className="font-medium">{d.sections?.length || 0}</span> sections
                   </p>
                 </div>
                 <div className="flex items-center gap-1">
-                  <button onClick={e => { e.stopPropagation(); openEdit(d) }} className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition-colors"><Edit2 size={14} /></button>
-                  <button onClick={e => { e.stopPropagation(); setDeleteTarget(d.id) }} className="p-1.5 rounded-lg hover:bg-red-50 text-slate-500 hover:text-red-600 transition-colors"><Trash2 size={14} /></button>
-                  {expanded[d.id] ? <ChevronDown size={16} className="text-slate-400" /> : <ChevronRight size={16} className="text-slate-400" />}
+                  <button onClick={e => { e.stopPropagation(); openEdit(d) }} className="p-2.5 rounded-xl bg-slate-100 hover:bg-indigo-50 text-slate-500 hover:text-indigo-600 transition-all"><Edit2 size={14} /></button>
+                  <button onClick={e => { e.stopPropagation(); setDeleteTarget(d.id) }} className="p-2.5 rounded-xl bg-slate-100 hover:bg-red-50 text-slate-500 hover:text-red-600 transition-all"><Trash2 size={14} /></button>
+                  {expanded[d.id] ? <ChevronDown size={18} className="text-slate-400 ml-1" /> : <ChevronRight size={18} className="text-slate-400 ml-1" />}
                 </div>
               </div>
 
               {expanded[d.id] && (
-                <div className="border-t border-slate-100 px-4 py-3 bg-slate-50">
-                  <div className="flex items-center justify-between mb-2">
-                    <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Sections</p>
+                <div className="border-t border-slate-100/50 px-5 py-4 bg-slate-50/50">
+                  <div className="flex items-center justify-between mb-3">
+                    <p className="text-xs font-bold text-indigo-600 uppercase tracking-widest bg-indigo-100 px-3 py-1 rounded-full">Sections</p>
                     <button onClick={() => { setSectionModal(d.id); setSectionName('') }} className="btn-ghost btn-sm"><Plus size={12} />Add Section</button>
                   </div>
                   {d.sections?.length === 0 ? (
-                    <p className="text-xs text-slate-400 py-2">No sections yet</p>
+                    <p className="text-sm text-slate-400 py-2">No sections yet</p>
                   ) : (
                     <div className="flex flex-wrap gap-2">
                       {d.sections.map(s => (
-                        <div key={s.id} className="flex items-center gap-1.5 bg-white border border-slate-200 rounded-lg px-3 py-1.5">
-                          <span className="text-sm text-slate-700">{s.name}</span>
+                        <div key={s.id} className="flex items-center gap-2 bg-white border border-slate-200 rounded-xl px-4 py-2 shadow-sm">
+                          <span className="text-sm font-semibold text-slate-700">{s.name}</span>
                           <button onClick={() => deleteSection(d.id, s.id)} className="text-slate-300 hover:text-red-500 transition-colors ml-1">
                             <Trash2 size={12} />
                           </button>

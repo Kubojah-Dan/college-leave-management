@@ -408,11 +408,11 @@ export default function Dashboard() {
   return (
     <div className="space-y-6 animate-slide-up">
       {/* ── Dashboard Header Banner ── */}
-      <div className="rounded-2xl overflow-hidden shadow-sm" style={{ background: 'linear-gradient(135deg, #0f172a, #1e1b4b)' }}>
+      <div className="rounded-2xl overflow-hidden shadow-lg" style={{ background: 'linear-gradient(135deg, #1e293b 0%, #312e81 50%, #4c1d95 100%)' }}>
         <div className="h-1.5" style={{ background: `linear-gradient(90deg, ${roleColor}, ${roleColor}66)` }} />
         <div className="px-6 py-5 flex items-center justify-between gap-4">
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl overflow-hidden border-2 flex-shrink-0"
+            <div className="w-14 h-14 rounded-2xl overflow-hidden border-2 flex-shrink-0 shadow-xl"
               style={{ borderColor: `${roleColor}55`, background: `linear-gradient(135deg, ${roleColor}33, ${roleColor}11)` }}>
               {user?.avatarUrl
                 ? <img src={user.avatarUrl} alt="avatar" className="w-full h-full object-cover" />
@@ -423,7 +423,7 @@ export default function Dashboard() {
               <p className="text-white/50 text-xs font-medium uppercase tracking-wider">{greeting()}</p>
               <h1 className="text-xl font-bold text-white mt-0.5">{user?.firstName} {user?.lastName}</h1>
               <div className="flex items-center gap-2 mt-1 flex-wrap">
-                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold text-white capitalize" style={{ background: roleColor }}>
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold text-white capitalize" style={{ background: roleColor, boxShadow: `0 0 12px ${roleColor}66` }}>
                   {user?.role}
                 </span>
                 {user?.department?.name && (
@@ -453,10 +453,18 @@ export default function Dashboard() {
       {/* Recent Leaves */}
       <div className="dashboard-glass-card rounded-2xl p-5">
         <div className="flex items-center justify-between mb-5">
-          <h2 className="text-base font-semibold text-slate-800">Recent Leave Requests</h2>
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center shadow-lg">
+              <FileText size={20} className="text-white" />
+            </div>
+            <div>
+              <h2 className="text-lg font-bold text-slate-800">Recent Leave Requests</h2>
+              <p className="text-xs text-slate-500">Latest activity across the system</p>
+            </div>
+          </div>
           <Link
             to={user?.role === 'student' ? '/app/my-leaves' : '/app/approvals'}
-            className="text-sm text-primary-600 hover:text-primary-700 flex items-center gap-1 font-medium"
+            className="text-sm text-primary-600 hover:text-primary-700 flex items-center gap-1 font-semibold"
           >
             View all <ChevronRight size={14} />
           </Link>
@@ -464,38 +472,38 @@ export default function Dashboard() {
 
         {recent.length === 0 ? (
           <div className="text-center py-12">
-            <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
-              <FileText size={28} className="text-slate-300" />
+            <div className="w-20 h-20 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <FileText size={36} className="text-slate-300" />
             </div>
-            <p className="text-slate-500 text-sm font-medium">No leave requests yet</p>
+            <p className="text-slate-500 font-medium">No leave requests yet</p>
             {user?.role === 'student' && (
               <Link to="/app/apply" className="btn-primary mt-4 inline-flex">Apply for Leave</Link>
             )}
           </div>
         ) : (
-          <div className="table-wrapper">
-            <table className="table">
+          <div className="table-modern-wrapper">
+            <table className="table-modern">
               <thead>
                 <tr>
-                  {['admin', 'hod', 'principal'].includes(user?.role) && <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 bg-slate-50/50 uppercase tracking-wider border-b border-slate-100">Student</th>}
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 bg-slate-50/50 uppercase tracking-wider border-b border-slate-100">Type</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 bg-slate-50/50 uppercase tracking-wider border-b border-slate-100">From</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 bg-slate-50/50 uppercase tracking-wider border-b border-slate-100">To</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 bg-slate-50/50 uppercase tracking-wider border-b border-slate-100">Days</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 bg-slate-50/50 uppercase tracking-wider border-b border-slate-100">Status</th>
+                  {['admin', 'hod', 'principal'].includes(user?.role) && <th className="px-4 py-3 text-left text-xs font-bold text-white uppercase tracking-wider bg-gradient-to-r from-indigo-500 to-purple-500">Student</th>}
+                  <th className="px-4 py-3 text-left text-xs font-bold text-white uppercase tracking-wider bg-gradient-to-r from-indigo-500 to-purple-500">Type</th>
+                  <th className="px-4 py-3 text-left text-xs font-bold text-white uppercase tracking-wider bg-gradient-to-r from-indigo-500 to-purple-500">From</th>
+                  <th className="px-4 py-3 text-left text-xs font-bold text-white uppercase tracking-wider bg-gradient-to-r from-indigo-500 to-purple-500">To</th>
+                  <th className="px-4 py-3 text-left text-xs font-bold text-white uppercase tracking-wider bg-gradient-to-r from-indigo-500 to-purple-500">Days</th>
+                  <th className="px-4 py-3 text-left text-xs font-bold text-white uppercase tracking-wider bg-gradient-to-r from-indigo-500 to-purple-500">Status</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {recent.map(l => (
-                  <tr key={l.id} className="hover:bg-slate-50 transition-colors">
+                  <tr key={l.id} className="hover:bg-indigo-50/30 transition-all duration-200">
                     {['admin', 'hod', 'principal'].includes(user?.role) && (
-                      <td className="px-4 py-3 text-slate-700 text-sm font-medium">{l.student?.firstName} {l.student?.lastName}</td>
+                      <td className="px-4 py-3 text-slate-700 text-sm font-semibold">{l.student?.firstName} {l.student?.lastName}</td>
                     )}
-                    <td className="px-4 py-3 text-slate-500 text-sm">{l.leaveType}</td>
-                    <td className="px-4 py-3 text-slate-500 text-sm">{l.startDate}</td>
-                    <td className="px-4 py-3 text-slate-500 text-sm">{l.endDate}</td>
-                    <td className="px-4 py-3 text-slate-500 text-sm"><span className="font-semibold text-slate-700">{l.totalDays}d</span></td>
-                    <td className="px-4 py-3 text-slate-500 text-sm"><StatusBadge status={l.status} /></td>
+                    <td className="px-4 py-3 text-slate-600 text-sm">{l.leaveType}</td>
+                    <td className="px-4 py-3 text-slate-600 text-sm">{l.startDate}</td>
+                    <td className="px-4 py-3 text-slate-600 text-sm">{l.endDate}</td>
+                    <td className="px-4 py-3 text-slate-600 text-sm"><span className="bg-indigo-100 text-indigo-700 px-2 py-1 rounded-lg text-xs font-bold">{l.totalDays}d</span></td>
+                    <td className="px-4 py-3 text-slate-600 text-sm"><StatusBadge status={l.status} /></td>
                   </tr>
                 ))}
               </tbody>

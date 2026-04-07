@@ -88,11 +88,14 @@ export default function Users() {
     <div className="space-y-6 animate-slide-up">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800">Users</h1>
-          <p className="text-slate-500 text-sm mt-1">{users.length} total users</p>
-          <div className="mt-2 h-1 w-12 rounded-full" style={{ background: 'linear-gradient(90deg,#6366f1,#8b5cf6)' }} />
+          <h1 className="section-title">
+            <span className="section-title-accent">Users</span>
+          </h1>
+          <p className="text-slate-500 text-sm mt-3">{users.length} total users</p>
         </div>
-        <button className="btn-primary" onClick={openCreate}><Plus size={16} />Add User</button>
+        <button className="btn-primary px-5 py-2.5 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5" onClick={openCreate}>
+          <Plus size={16} />Add User
+        </button>
       </div>
 
       {/* Search & Filter */}
@@ -110,45 +113,43 @@ export default function Users() {
       {loading ? <PageLoader /> : filtered.length === 0 ? (
         <EmptyState icon={UsersIcon} title="No users found" description="Try adjusting your search or filters." />
       ) : (
-        <div className="card p-0 overflow-hidden">
-          <div className="table-wrapper">
-            <table className="table">
-              <thead>
-                <tr><th>Name</th><th>Email</th><th>Role</th><th>Department</th><th>Status</th><th>Actions</th></tr>
-              </thead>
-              <tbody>
-                {filtered.map(u => (
-                  <tr key={u.id}>
-                    <td>
-                      <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center flex-shrink-0">
-                          <span className="text-primary-700 font-semibold text-xs">{u.firstName?.[0]?.toUpperCase()}</span>
-                        </div>
-                        <div>
-                          <p className="font-medium text-slate-800">{u.firstName} {u.lastName}</p>
-                          <p className="text-xs text-slate-400">{u.phone || '—'}</p>
-                        </div>
+        <div className="table-modern-wrapper">
+          <table className="table-modern">
+            <thead>
+              <tr><th>Name</th><th>Email</th><th>Role</th><th>Department</th><th>Status</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+              {filtered.map(u => (
+                <tr key={u.id}>
+                  <td>
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center flex-shrink-0 shadow-md">
+                        <span className="text-white font-bold text-sm">{u.firstName?.[0]?.toUpperCase()}</span>
                       </div>
-                    </td>
-                    <td className="text-slate-600">{u.email}</td>
-                    <td><RoleBadge role={u.role} /></td>
-                    <td className="text-sm">{u.department?.name || '—'}</td>
-                    <td>
-                      <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${u.isActive ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}`}>
-                        {u.isActive ? 'Active' : 'Inactive'}
-                      </span>
-                    </td>
-                    <td>
-                      <div className="flex items-center gap-1">
-                        <button onClick={() => openEdit(u)} className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition-colors"><Edit2 size={14} /></button>
-                        <button onClick={() => setDeleteTarget(u.id)} className="p-1.5 rounded-lg hover:bg-red-50 text-slate-500 hover:text-red-600 transition-colors"><Trash2 size={14} /></button>
+                      <div>
+                        <p className="font-semibold text-slate-800">{u.firstName} {u.lastName}</p>
+                        <p className="text-xs text-slate-400">{u.phone || '—'}</p>
                       </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                    </div>
+                  </td>
+                  <td className="text-slate-600">{u.email}</td>
+                  <td><RoleBadge role={u.role} /></td>
+                  <td className="text-sm text-slate-600 font-medium">{u.department?.name || '—'}</td>
+                  <td>
+                    <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${u.isActive ? 'bg-gradient-to-r from-emerald-500 to-green-500 text-white shadow-md' : 'bg-gradient-to-r from-red-500 to-rose-500 text-white shadow-md'}`}>
+                      {u.isActive ? 'Active' : 'Inactive'}
+                    </span>
+                  </td>
+                  <td>
+                    <div className="flex items-center gap-1">
+                      <button onClick={() => openEdit(u)} className="p-2 rounded-lg bg-slate-100 hover:bg-indigo-50 text-slate-500 hover:text-indigo-600 transition-all"><Edit2 size={14} /></button>
+                      <button onClick={() => setDeleteTarget(u.id)} className="p-2 rounded-lg bg-slate-100 hover:bg-red-50 text-slate-500 hover:text-red-600 transition-all"><Trash2 size={14} /></button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
 

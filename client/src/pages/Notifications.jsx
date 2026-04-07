@@ -46,9 +46,10 @@ export default function Notifications() {
     <div className="max-w-2xl mx-auto space-y-6 animate-slide-up">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800">Notifications</h1>
-          <p className="text-slate-500 text-sm mt-1">{unread} unread</p>
-          <div className="mt-2 h-1 w-12 rounded-full" style={{ background: 'linear-gradient(90deg,#6366f1,#8b5cf6)' }} />
+          <h1 className="section-title">
+            <span className="section-title-accent">Notifications</span>
+          </h1>
+          <p className="text-slate-500 text-sm mt-3">{unread} unread</p>
         </div>
         {unread > 0 && (
           <button className="btn-ghost btn-sm" onClick={markAllRead}>
@@ -60,25 +61,25 @@ export default function Notifications() {
       {loading ? <PageLoader /> : notifications.length === 0 ? (
         <EmptyState icon={Bell} title="No notifications" description="You're all caught up! Notifications will appear here." />
       ) : (
-        <div className="space-y-2">
+        <div className="space-y-3">
           {notifications.map(n => (
             <div
               key={n.id}
               onClick={() => !n.isRead && markRead(n.id)}
-              className={`card p-4 flex items-start gap-3 cursor-pointer transition-all duration-200 hover:-translate-y-0.5 ${!n.isRead ? 'border-primary-200 bg-primary-50/40 hover:shadow-md' : 'hover:bg-slate-50'}`}
+              className={`dashboard-glass-card p-5 flex items-start gap-4 cursor-pointer transition-all duration-300 hover:-translate-y-1 ${!n.isRead ? 'border-l-4 border-l-indigo-500' : 'hover:border-l-4 hover:border-l-indigo-200'}`}
             >
-              <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 text-base ${!n.isRead ? 'bg-primary-100' : 'bg-slate-100'}`}>
+              <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 text-lg shadow-md ${!n.isRead ? 'bg-gradient-to-br from-indigo-500 to-purple-500' : 'bg-slate-200'}`}>
                 {typeIcon(n.type)}
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-start justify-between gap-2">
-                  <p className={`text-sm font-semibold ${!n.isRead ? 'text-slate-800' : 'text-slate-600'}`}>{n.title}</p>
-                  {!n.isRead && <div className="w-2 h-2 bg-primary-500 rounded-full flex-shrink-0 mt-1.5" />}
+                  <p className={`text-sm font-bold ${!n.isRead ? 'text-slate-800' : 'text-slate-600'}`}>{n.title}</p>
+                  {!n.isRead && <div className="w-3 h-3 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex-shrink-0 shadow-md animate-pulse" />}
                 </div>
-                <p className="text-xs text-slate-500 mt-0.5 leading-relaxed">{n.message}</p>
-                <div className="flex items-center gap-1 mt-1.5">
-                  <Clock size={11} className="text-slate-400" />
-                  <span className="text-xs text-slate-400">{new Date(n.createdAt).toLocaleString()}</span>
+                <p className="text-sm text-slate-500 mt-2 leading-relaxed">{n.message}</p>
+                <div className="flex items-center gap-2 mt-2">
+                  <Clock size={12} className="text-slate-400" />
+                  <span className="text-xs text-slate-400 font-medium">{new Date(n.createdAt).toLocaleString()}</span>
                 </div>
               </div>
             </div>

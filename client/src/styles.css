@@ -65,6 +65,106 @@
   .table tbody tr { @apply hover:bg-white/60 transition-colors duration-200; }
   .table tbody tr:last-child td { @apply border-b-0; }
 
+  /* ── Enhanced Modern Tables ── */
+  .table-modern {
+    @apply w-full text-sm;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+  .table-modern thead tr {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  }
+  .table-modern th {
+    @apply px-4 py-3.5 text-left text-xs font-bold text-white uppercase tracking-wider;
+    background: transparent;
+    border: none;
+  }
+  .table-modern th:first-child { @apply rounded-tl-xl; }
+  .table-modern th:last-child { @apply rounded-tr-xl; }
+  
+  .table-modern tbody tr {
+    @apply transition-all duration-200;
+    background: rgba(255, 255, 255, 0.5);
+    border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+  }
+  .table-modern tbody tr:hover {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(139, 92, 246, 0.08) 100%);
+    transform: scale(1.005);
+  }
+  .table-modern tbody tr:last-child {
+    border-bottom: none;
+  }
+  .table-modern tbody tr:last-child td:first-child { @apply rounded-bl-xl; }
+  .table-modern tbody tr:last-child td:last-child { @apply rounded-br-xl; }
+  
+  .table-modern td {
+    @apply px-4 py-3.5 text-slate-700;
+    border: none;
+    background: transparent;
+  }
+  .table-modern td:first-child {
+    @apply font-semibold text-slate-800;
+  }
+  
+  .table-modern-wrapper {
+    @apply overflow-hidden rounded-2xl;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.08);
+  }
+  
+  /* ── Section Title Styling ── */
+  .section-title {
+    @apply text-2xl font-bold text-slate-800;
+    position: relative;
+    display: inline-block;
+  }
+  .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 0;
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(90deg, #6366f1, #8b5cf6);
+    border-radius: 2px;
+  }
+  .section-title-accent {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  /* ── Card Header ── */
+  .card-header-modern {
+    @apply flex items-center justify-between mb-4;
+  }
+  .card-title-modern {
+    @apply text-lg font-semibold text-slate-800;
+  }
+
+  /* ── Filter Pills ── */
+  .filter-pill {
+    @apply px-4 py-2 rounded-full text-xs font-semibold transition-all duration-200 cursor-pointer;
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(203, 213, 225, 0.5);
+    color: #64748b;
+  }
+  .filter-pill:hover {
+    background: rgba(99, 102, 241, 0.1);
+    border-color: rgba(99, 102, 241, 0.3);
+    color: #6366f1;
+  }
+  .filter-pill-active {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+  }
+
   /* ── Login glassmorphism ── */
   .glass-card {
     background: rgba(255, 255, 255, 0.08);

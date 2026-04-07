@@ -59,20 +59,23 @@ export default function MyLeaves() {
     <div className="space-y-6 animate-slide-up">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800">{isStudent ? 'My Leaves' : 'All Leaves'}</h1>
-          <p className="text-slate-500 text-sm mt-1">{leaves.length} record{leaves.length !== 1 ? 's' : ''} found</p>
-          <div className="mt-2 h-1 w-12 rounded-full" style={{ background: 'linear-gradient(90deg,#6366f1,#8b5cf6)' }} />
+          <h1 className="section-title">
+            <span className="section-title-accent">{isStudent ? 'My Leaves' : 'All Leaves'}</span>
+          </h1>
+          <p className="text-slate-500 text-sm mt-3">{leaves.length} record{leaves.length !== 1 ? 's' : ''} found</p>
         </div>
-        {isStudent && <Link to="/apply" className="btn-primary"><PlusCircle size={16} />Apply Leave</Link>}
+        {isStudent && (
+          <Link to="/apply" className="btn-primary px-5 py-2.5 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5">
+            <PlusCircle size={16} />Apply Leave
+          </Link>
+        )}
       </div>
 
-      {/* Filters */}
-      <div className="flex items-center gap-2 flex-wrap">
+      <div className="flex items-center gap-3 flex-wrap">
         <Filter size={16} className="text-slate-400" />
         {STATUSES.map(s => (
           <button key={s} onClick={() => setFilter(s)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 ${filter === s ? 'text-white shadow-md' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'}`}
-            style={filter === s ? { background: 'linear-gradient(135deg,#6366f1,#8b5cf6)' } : {}}>
+            className={`filter-pill ${filter === s ? 'filter-pill-active' : ''}`}>
             {s === '' ? 'All' : s.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase())}
           </button>
         ))}
@@ -82,56 +85,61 @@ export default function MyLeaves() {
         <EmptyState icon={FileText} title="No leaves found" description="No leave requests match your filter."
           action={isStudent ? <Link to="/apply" className="btn-primary">Apply for Leave</Link> : null} />
       ) : (
-        <div className="card p-0 overflow-hidden">
-          <div className="table-wrapper">
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  {!isStudent && <th>Student</th>}
-                  <th>Type</th>
-                  <th>From</th>
-                  <th>To</th>
-                  <th>Days</th>
-                  <th>Status</th>
-                  <th>Applied</th>
-                  <th>Actions</th>
+        <div className="table-modern-wrapper">
+          <table className="table-modern">
+            <thead>
+              <tr>
+                <th>#</th>
+                {!isStudent && <th>Student</th>}
+                <th>Type</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Days</th>
+                <th>Status</th>
+                <th>Applied</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {leaves.map(l => (
+                <tr key={l.id}>
+                  <td className="text-slate-400 text-xs font-mono">#{l.id}</td>
+                  {!isStudent && (
+                    <td>
+                      <div className="font-semibold text-slate-800">{l.student?.firstName} {l.student?.lastName}</div>
+                      <div className="text-xs text-slate-400">{l.student?.department?.name}</div>
+                    </td>
+                  )}
+                  <td>
+                    <span className="font-semibold text-slate-700">{l.leaveType}</span>
+                    {l.documents?.length > 0 && (
+                      <span className="ml-2 text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">📎{l.documents.length}</span>
+                    )}
+                  </td>
+                  <td className="font-medium">{l.startDate}</td>
+                  <td className="font-medium">{l.endDate}</td>
+                  <td><span className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white px-3 py-1 rounded-lg text-xs font-bold">{l.totalDays}d</span></td>
+                  <td><StatusBadge status={l.status} /></td>
+                  <td className="text-slate-500 text-xs">{new Date(l.createdAt).toLocaleDateString()}</td>
+                  <td>
+                    <div className="flex items-center gap-1">
+                      <button onClick={() => setViewLeave(l)} className="p-2 rounded-lg bg-slate-100 hover:bg-indigo-50 text-slate-500 hover:text-indigo-600 transition-all" title="View details">
+                        <Eye size={15} />
+                      </button>
+                      <button onClick={() => downloadPDF(l.id)} className="p-2 rounded-lg bg-slate-100 hover:bg-blue-50 text-slate-500 hover:text-blue-600 transition-all" title="Download PDF">
+                        <Download size={15} />
+                      </button>
+                      {isStudent && ['pending_hod','pending_principal'].includes(l.status) && (
+                        <button onClick={() => setCancelTarget(l.id)} className="p-2 rounded-lg bg-slate-100 hover:bg-red-50 text-slate-500 hover:text-red-600 transition-all" title="Cancel">
+                          <X size={15} />
+                        </button>
+                      )}
+                    </div>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {leaves.map(l => (
-                  <tr key={l.id}>
-                    <td className="text-slate-400 text-xs">#{l.id}</td>
-                    {!isStudent && <td className="font-medium">{l.student?.firstName} {l.student?.lastName}<br/><span className="text-xs text-slate-400">{l.student?.department?.name}</span></td>}
-                    <td>
-                      <span className="font-medium text-slate-700">{l.leaveType}</span>
-                      {l.documents?.length > 0 && <span className="ml-1 text-xs text-slate-400">📎{l.documents.length}</span>}
-                    </td>
-                    <td>{l.startDate}</td>
-                    <td>{l.endDate}</td>
-                    <td className="font-medium">{l.totalDays}d</td>
-                    <td><StatusBadge status={l.status} /></td>
-                    <td className="text-xs text-slate-400">{new Date(l.createdAt).toLocaleDateString()}</td>
-                    <td>
-                      <div className="flex items-center gap-1">
-                        <button onClick={() => setViewLeave(l)} className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition-colors" title="View details">
-                          <Eye size={15} />
-                        </button>
-                        <button onClick={() => downloadPDF(l.id)} className="p-1.5 rounded-lg hover:bg-blue-50 text-slate-500 hover:text-blue-600 transition-colors" title="Download PDF">
-                          <Download size={15} />
-                        </button>
-                        {isStudent && ['pending_hod','pending_principal'].includes(l.status) && (
-                          <button onClick={() => setCancelTarget(l.id)} className="p-1.5 rounded-lg hover:bg-red-50 text-slate-500 hover:text-red-600 transition-colors" title="Cancel">
-                            <X size={15} />
-                          </button>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
 
@@ -139,7 +147,6 @@ export default function MyLeaves() {
         title="Cancel Leave Request" message="Are you sure you want to cancel this leave request? This action cannot be undone."
         confirmLabel="Yes, Cancel" variant="danger" loading={cancelling} />
 
-      {/* View Details Modal */}
       <Modal open={!!viewLeave} onClose={() => setViewLeave(null)} title={`Leave #${viewLeave?.id} Details`} size="lg">
         {viewLeave && <LeaveDetail leave={viewLeave} />}
       </Modal>
