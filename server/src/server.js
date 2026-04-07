@@ -20,14 +20,14 @@ const notificationRoutes = require('./routes/notifications');
 
 const app    = express();
 const server = http.createServer(app);
-const io     = new Server(server, { cors: { origin: process.env.CLIENT_ORIGIN || 'http://localhost:5173', credentials: true } });
+const io     = new Server(server, { cors: { origin: process.env.CLIENT_ORIGIN || 'https://clmseshwar.vercel.app/', credentials: true } });
 const PORT   = process.env.PORT || 4000;
 
 setIo(io);
 
 // ── Middleware ──────────────────────────────────────────────────────────────
 app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
-app.use(cors({ origin: process.env.CLIENT_ORIGIN || 'http://localhost:5173', credentials: true }));
+app.use(cors({ origin: process.env.CLIENT_ORIGIN || 'https://clmseshwar.vercel.app/', credentials: true }));
 app.use(express.json());
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 500 }));
 
