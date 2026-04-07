@@ -122,8 +122,8 @@ export default function LandingPage() {
   const [liveStats, setLiveStats] = useState({ students: 0, departments: 0, leaves: 0 })
 
   useEffect(() => {
-    const BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000/api'
-    fetch(`${BASE.replace('/api', '')}/api/public/stats`)
+    const base = (import.meta.env.VITE_API_URL || 'http://localhost:4000/api').replace(/\/api$/, '')
+    fetch(`${base}/api/public/stats`)
       .then(r => r.json())
       .then(d => setLiveStats(d))
       .catch(() => {})
