@@ -14,60 +14,63 @@ import { useAuth } from '../context/AuthContext'
 import api from '../services/api'
 import { StatusBadge, PageLoader } from '../components/ui/index'
 
-// ── Palette ─────────────────────────────────────────────────────────────────
+// ── Enhanced Palette ─────────────────────────────────────────────────────────────────
 const C = {
   indigo: '#6366f1', violet: '#8b5cf6', emerald: '#10b981',
   amber: '#f59e0b', blue: '#3b82f6', rose: '#f43f5e', cyan: '#06b6d4',
+  lime: '#84cc16', fuchsia: '#d946ef', teal: '#14b8a6',
 }
 const STATUS_COLORS = {
   pending_hod: C.amber, pending_principal: C.blue,
   approved: C.emerald, rejected: C.rose, cancelled: '#94a3b8',
 }
 
-// ── Custom tooltip ───────────────────────────────────────────────────────────
+// ── Enhanced Custom tooltip ───────────────────────────────────────────────────────────
 function ChartTip({ active, payload, label }) {
   if (!active || !payload?.length) return null
   return (
-    <div className="bg-white/80 backdrop-blur-xl border border-white/50 rounded-xl px-4 py-3 shadow-2xl text-xs" style={{ boxShadow: '0 20px 40px rgba(0,0,0,0.1)' }}>
-      {label && <p className="text-slate-800 font-bold mb-2 uppercase tracking-widest">{label}</p>}
+    <div className="bg-white/90 backdrop-blur-xl border border-white/70 rounded-2xl px-5 py-4 shadow-2xl text-sm font-medium" style={{ boxShadow: '0 25px 50px rgba(0,0,0,0.15)' }}>
+      {label && <p className="text-slate-900 font-semibold mb-2 uppercase tracking-wider text-xs">{label}</p>}
       {payload.map((p, i) => (
-        <div key={i} className="flex items-center gap-2 mt-1">
-          <div className="w-2.5 h-2.5 rounded-full shadow-sm" style={{ backgroundColor: p.color || p.fill }} />
-          <p className="text-slate-600 font-semibold flex-1">
-            {p.name}
-          </p>
-          <span className="text-slate-900 font-extrabold">{p.value}</span>
+        <div key={i} className="flex items-center gap-3 mt-2">
+          <div className="w-3 h-3 rounded-full shadow-md" style={{ backgroundColor: p.color || p.fill }} />
+          <div className="flex-1 min-w-0">
+            <p className="text-slate-700 font-medium">{p.name}</p>
+            <p className="text-slate-900 font-bold mt-0.5">{p.value}</p>
+          </div>
         </div>
       ))}
     </div>
   )
 }
 
-// ── Chart card wrapper ───────────────────────────────────────────────────────
+// ── Enhanced Chart card wrapper ───────────────────────────────────────────────────────
 function ChartCard({ title, subtitle, children, className = '' }) {
   return (
-    <div className={`dashboard-glass-card rounded-2xl p-5 ${className}`}>
-      <div className="mb-4">
-        <h3 className="text-sm font-semibold text-slate-800">{title}</h3>
-        {subtitle && <p className="text-xs text-slate-400 mt-0.5">{subtitle}</p>}
+    <div className={`dashboard-glass-card rounded-3xl p-6 ${className}`}>
+      <div className="mb-5">
+        <h3 className="text-base font-semibold text-slate-900 flex items-center gap-2">
+          {title}
+        </h3>
+        {subtitle && <p className="text-slate-500 text-sm mt-1.5">{subtitle}</p>}
       </div>
-      {children}
+      <div className="mt-4">{children}</div>
     </div>
   )
 }
 
-// ── Stat card ────────────────────────────────────────────────────────────────
+// ── Enhanced Stat card ────────────────────────────────────────────────────────────────
 function StatCard({ label, value, icon: Icon, from, to }) {
   return (
-    <div className="stat-card-glass rounded-2xl p-5 text-white shadow-lg relative overflow-hidden" style={{ background: `linear-gradient(135deg, ${from}dd, ${to}cc)` }}>
-      <div className="absolute -right-4 -top-4 w-20 h-20 rounded-full bg-white/10" />
-      <div className="absolute -right-2 -bottom-6 w-28 h-28 rounded-full bg-white/5" />
+    <div className="stat-card-glass rounded-3xl p-6 text-white shadow-xl relative overflow-hidden" style={{ background: `linear-gradient(135deg, ${from}dd, ${to}cc)` }}>
+      <div className="absolute -right-5 -top-5 w-24 h-24 rounded-full bg-white/10" />
+      <div className="absolute -right-3 -bottom-8 w-32 h-32 rounded-full bg-white/5" />
       <div className="relative">
-        <div className="icon-glass w-9 h-9 rounded-xl flex items-center justify-center mb-3">
-          <Icon size={18} className="text-white" />
+        <div className="icon-glass w-10 h-10 rounded-2xl flex items-center justify-center mb-4">
+          <Icon size={20} className="text-white drop-shadow-lg" />
         </div>
-        <p className="text-3xl font-extrabold">{value ?? '—'}</p>
-        <p className="text-white/70 text-xs mt-1 font-medium">{label}</p>
+        <p className="text-4xl font-extrabold tracking-tight">{value ?? '—'}</p>
+        <p className="text-white/80 text-sm mt-1.5 font-medium">{label}</p>
       </div>
     </div>
   )
@@ -124,13 +127,13 @@ function StudentDashboard({ stats, leaves }) {
         <ChartCard title="Leave Status Overview" subtitle="Distribution of all your requests">
           {statusPie.length === 0
             ? <p className="text-slate-400 text-sm text-center py-8">No data yet</p>
-            : <ResponsiveContainer width="100%" height={220}>
+            : <ResponsiveContainer width="100%" height={240}>
                 <PieChart>
-                  <Pie data={statusPie} cx="50%" cy="50%" innerRadius={55} outerRadius={85} paddingAngle={3} dataKey="value">
+                  <Pie data={statusPie} cx="50%" cy="50%" innerRadius={60} outerRadius={90} paddingAngle={3} dataKey="value">
                     {statusPie.map((d, i) => <Cell key={i} fill={d.fill} />)}
                   </Pie>
                   <Tooltip content={<ChartTip />} />
-                  <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 11 }} />
+                  <Legend iconType="circle" iconSize={10} wrapperStyle={{ fontSize: 12 }} verticalAlign="bottom" height={36} />
                 </PieChart>
               </ResponsiveContainer>
           }
@@ -138,58 +141,58 @@ function StudentDashboard({ stats, leaves }) {
 
         {/* Radial progress */}
         <ChartCard title="Leave Outcomes" subtitle="Visual breakdown by result">
-          <ResponsiveContainer width="100%" height={220}>
-            <RadialBarChart cx="50%" cy="50%" innerRadius={30} outerRadius={90} data={radialData} startAngle={90} endAngle={-270}>
-              <RadialBar minAngle={5} dataKey="value" cornerRadius={6} label={{ position: 'insideStart', fill: '#fff', fontSize: 10 }} />
+          <ResponsiveContainer width="100%" height={240}>
+            <RadialBarChart cx="50%" cy="50%" innerRadius={40} outerRadius={100} data={radialData} startAngle={90} endAngle={-270}>
+              <RadialBar minAngle={5} dataKey="value" cornerRadius={8} label={{ position: 'insideStart', fill: '#fff', fontSize: 12 }} />
               <Tooltip content={<ChartTip />} />
-              <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 11 }} />
+              <Legend iconType="circle" iconSize={10} wrapperStyle={{ fontSize: 12 }} verticalAlign="bottom" height={36} />
             </RadialBarChart>
           </ResponsiveContainer>
         </ChartCard>
       </div>
 
-      {/* Monthly trend */}
-      {monthlyTrend.length > 0 && (
-        <ChartCard title="Monthly Leave Trend" subtitle="Your leave activity over the last 6 months">
-          <ResponsiveContainer width="100%" height={200}>
-            <AreaChart data={monthlyTrend} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
-              <defs>
-                <linearGradient id="gApproved" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor={C.emerald} stopOpacity={0.3} />
-                  <stop offset="95%" stopColor={C.emerald} stopOpacity={0} />
-                </linearGradient>
-                <linearGradient id="gPending" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor={C.amber} stopOpacity={0.3} />
-                  <stop offset="95%" stopColor={C.amber} stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-              <XAxis dataKey="month" tick={{ fontSize: 11, fill: '#94a3b8' }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fontSize: 11, fill: '#94a3b8' }} axisLine={false} tickLine={false} allowDecimals={false} />
-              <Tooltip content={<ChartTip />} />
-              <Area type="monotone" dataKey="approved" stroke={C.emerald} fill="url(#gApproved)" strokeWidth={2} name="Approved" />
-              <Area type="monotone" dataKey="pending"  stroke={C.amber}   fill="url(#gPending)"  strokeWidth={2} name="Pending" />
-            </AreaChart>
-          </ResponsiveContainer>
-        </ChartCard>
-      )}
+       {/* Monthly trend */}
+       {monthlyTrend.length > 0 && (
+         <ChartCard title="Monthly Leave Trend" subtitle="Your leave activity over the last 6 months">
+           <ResponsiveContainer width="100%" height={220}>
+             <AreaChart data={monthlyTrend} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
+               <defs>
+                 <linearGradient id="gApproved" x1="0" y1="0" x2="0" y2="1">
+                   <stop offset="5%" stopColor={C.emerald} stopOpacity={0.4} />
+                   <stop offset="95%" stopColor={C.emerald} stopOpacity={0} />
+                 </linearGradient>
+                 <linearGradient id="gPending" x1="0" y1="0" x2="0" y2="1">
+                   <stop offset="5%" stopColor={C.amber} stopOpacity={0.4} />
+                   <stop offset="95%" stopColor={C.amber} stopOpacity={0} />
+                 </linearGradient>
+               </defs>
+               <CartesianGrid strokeDasharray="4 4" stroke="rgba(226, 232, 240, 0.3)" />
+               <XAxis dataKey="month" tick={{ fontSize: 12, fill: '#64748b' }} axisLine={false} tickLine={false} />
+               <YAxis tick={{ fontSize: 12, fill: '#64748b' }} axisLine={false} tickLine={false} allowDecimals={false} />
+               <Tooltip content={<ChartTip />} />
+               <Area type="monotone" dataKey="approved" stroke={C.emerald} fill="url(#gApproved)" strokeWidth={3} name="Approved" />
+               <Area type="monotone" dataKey="pending"  stroke={C.amber}   fill="url(#gPending)"  strokeWidth={3} name="Pending" />
+             </AreaChart>
+           </ResponsiveContainer>
+         </ChartCard>
+       )}
 
-      {/* Leave type bar */}
-      {typeData.length > 0 && (
-        <ChartCard title="Leave Types Applied" subtitle="How many of each type you've submitted">
-          <ResponsiveContainer width="100%" height={180}>
-            <BarChart data={typeData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-              <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#94a3b8' }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fontSize: 11, fill: '#94a3b8' }} axisLine={false} tickLine={false} allowDecimals={false} />
-              <Tooltip content={<ChartTip />} />
-              <Bar dataKey="value" name="Count" radius={[6, 6, 0, 0]}>
-                {typeData.map((_, i) => <Cell key={i} fill={[C.indigo, C.blue, C.cyan, C.violet, C.emerald][i % 5]} />)}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
-        </ChartCard>
-      )}
+       {/* Leave type bar */}
+       {typeData.length > 0 && (
+         <ChartCard title="Leave Types Applied" subtitle="How many of each type you've submitted">
+           <ResponsiveContainer width="100%" height={200}>
+             <BarChart data={typeData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
+               <CartesianGrid strokeDasharray="4 4" stroke="rgba(226, 232, 240, 0.3)" />
+               <XAxis dataKey="name" tick={{ fontSize: 12, fill: '#64748b' }} axisLine={false} tickLine={false} />
+               <YAxis tick={{ fontSize: 12, fill: '#64748b' }} axisLine={false} tickLine={false} allowDecimals={false} />
+               <Tooltip content={<ChartTip />} />
+               <Bar dataKey="value" name="Count" radius={[8, 8, 0, 0]} >
+                 {typeData.map((_, i) => <Cell key={i} fill={[C.indigo, C.blue, C.cyan, C.violet, C.emerald, C.lime, C.fuchsia, C.teal][i % 8]} />)}
+               </Bar>
+             </BarChart>
+           </ResponsiveContainer>
+         </ChartCard>
+       )}
     </div>
   )
 }
@@ -216,13 +219,13 @@ function HodDashboard({ stats, leaves }) {
         <ChartCard title="Department Leave Status" subtitle="All requests in your department">
           {statusPie.length === 0
             ? <p className="text-slate-400 text-sm text-center py-8">No data yet</p>
-            : <ResponsiveContainer width="100%" height={220}>
+            : <ResponsiveContainer width="100%" height={240}>
                 <PieChart>
-                  <Pie data={statusPie} cx="50%" cy="50%" outerRadius={85} paddingAngle={3} dataKey="value">
+                  <Pie data={statusPie} cx="50%" cy="50%" outerRadius={90} paddingAngle={3} dataKey="value">
                     {statusPie.map((d, i) => <Cell key={i} fill={d.fill} />)}
                   </Pie>
                   <Tooltip content={<ChartTip />} />
-                  <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 11 }} />
+                  <Legend iconType="circle" iconSize={10} wrapperStyle={{ fontSize: 12 }} verticalAlign="bottom" height={36} />
                 </PieChart>
               </ResponsiveContainer>
           }
@@ -231,13 +234,13 @@ function HodDashboard({ stats, leaves }) {
         <ChartCard title="Leave Types Distribution" subtitle="Types of leave in your department">
           {typeData.length === 0
             ? <p className="text-slate-400 text-sm text-center py-8">No data yet</p>
-            : <ResponsiveContainer width="100%" height={220}>
+            : <ResponsiveContainer width="100%" height={240}>
                 <PieChart>
-                  <Pie data={typeData} cx="50%" cy="50%" innerRadius={50} outerRadius={85} paddingAngle={3} dataKey="value">
+                  <Pie data={typeData} cx="50%" cy="50%" innerRadius={55} outerRadius={90} paddingAngle={3} dataKey="value">
                     {typeData.map((_, i) => <Cell key={i} fill={[C.indigo, C.blue, C.cyan, C.violet, C.emerald, C.amber][i % 6]} />)}
                   </Pie>
                   <Tooltip content={<ChartTip />} />
-                  <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 11 }} />
+                  <Legend iconType="circle" iconSize={10} wrapperStyle={{ fontSize: 12 }} verticalAlign="bottom" height={36} />
                 </PieChart>
               </ResponsiveContainer>
           }
@@ -261,21 +264,21 @@ function HodDashboard({ stats, leaves }) {
         </ChartCard>
       )}
 
-      {studentData.length > 0 && (
-        <ChartCard title="Top Students by Leave Count" subtitle="Students with most leave applications">
-          <ResponsiveContainer width="100%" height={180}>
-            <BarChart data={studentData} layout="vertical" margin={{ top: 0, right: 10, left: 10, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" horizontal={false} />
-              <XAxis type="number" tick={{ fontSize: 11, fill: '#94a3b8' }} axisLine={false} tickLine={false} allowDecimals={false} />
-              <YAxis type="category" dataKey="name" tick={{ fontSize: 11, fill: '#94a3b8' }} axisLine={false} tickLine={false} width={60} />
-              <Tooltip content={<ChartTip />} />
-              <Bar dataKey="count" name="Leaves" radius={[0, 6, 6, 0]}>
-                {studentData.map((_, i) => <Cell key={i} fill={[C.indigo, C.blue, C.cyan, C.violet, C.emerald, C.amber, C.rose, C.cyan][i % 8]} />)}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
-        </ChartCard>
-      )}
+       {studentData.length > 0 && (
+         <ChartCard title="Top Students by Leave Count" subtitle="Students with most leave applications">
+           <ResponsiveContainer width="100%" height={200}>
+             <BarChart data={studentData} layout="vertical" margin={{ top: 5, right: 10, left: 10, bottom: 0 }}>
+               <CartesianGrid strokeDasharray="4 4" stroke="rgba(226, 232, 240, 0.3)" horizontal={false} />
+               <XAxis type="number" tick={{ fontSize: 12, fill: '#64748b' }} axisLine={false} tickLine={false} allowDecimals={false} />
+               <YAxis type="category" dataKey="name" tick={{ fontSize: 12, fill: '#64748b' }} axisLine={false} tickLine={false} width={70} />
+               <Tooltip content={<ChartTip />} />
+               <Bar dataKey="count" name="Leaves" radius={[0, 8, 8, 0]}>
+                 {studentData.map((_, i) => <Cell key={i} fill={[C.indigo, C.blue, C.cyan, C.violet, C.emerald, C.amber, C.rose, C.teal][i % 8]} />)}
+               </Bar>
+             </BarChart>
+           </ResponsiveContainer>
+         </ChartCard>
+       )}
     </div>
   )
 }
@@ -330,39 +333,39 @@ function AdminDashboard({ stats, leaves }) {
         </ChartCard>
       </div>
 
-      {monthlyTrend.length > 0 && (
-        <ChartCard title="Monthly Leave Trend" subtitle="Institution-wide leave activity over 6 months">
-          <ResponsiveContainer width="100%" height={220}>
-            <LineChart data={monthlyTrend} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-              <XAxis dataKey="month" tick={{ fontSize: 11, fill: '#94a3b8' }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fontSize: 11, fill: '#94a3b8' }} axisLine={false} tickLine={false} allowDecimals={false} />
-              <Tooltip content={<ChartTip />} />
-              <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 11 }} />
-              <Line type="monotone" dataKey="approved" stroke={C.emerald} strokeWidth={2.5} dot={{ r: 4, fill: C.emerald }} name="Approved" />
-              <Line type="monotone" dataKey="pending"  stroke={C.amber}   strokeWidth={2.5} dot={{ r: 4, fill: C.amber }}   name="Pending" />
-              <Line type="monotone" dataKey="rejected" stroke={C.rose}    strokeWidth={2.5} dot={{ r: 4, fill: C.rose }}    name="Rejected" />
-            </LineChart>
-          </ResponsiveContainer>
-        </ChartCard>
-      )}
+       {monthlyTrend.length > 0 && (
+         <ChartCard title="Monthly Leave Trend" subtitle="Institution-wide leave activity over 6 months">
+           <ResponsiveContainer width="100%" height={240}>
+             <LineChart data={monthlyTrend} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
+               <CartesianGrid strokeDasharray="4 4" stroke="rgba(226, 232, 240, 0.3)" />
+               <XAxis dataKey="month" tick={{ fontSize: 12, fill: '#64748b' }} axisLine={false} tickLine={false} />
+               <YAxis tick={{ fontSize: 12, fill: '#64748b' }} axisLine={false} tickLine={false} allowDecimals={false} />
+               <Tooltip content={<ChartTip />} />
+               <Legend iconType="circle" iconSize={10} wrapperStyle={{ fontSize: 12 }} verticalAlign="bottom" height={36} />
+               <Line type="monotone" dataKey="approved" stroke={C.emerald} strokeWidth={3} dot={{ r: 5, fill: C.emerald }} name="Approved" />
+               <Line type="monotone" dataKey="pending"  stroke={C.amber}   strokeWidth={3} dot={{ r: 5, fill: C.amber }}   name="Pending" />
+               <Line type="monotone" dataKey="rejected" stroke={C.rose}    strokeWidth={3} dot={{ r: 5, fill: C.rose }}    name="Rejected" />
+             </LineChart>
+           </ResponsiveContainer>
+         </ChartCard>
+       )}
 
-      {deptData.length > 0 && (
-        <ChartCard title="Leaves by Department" subtitle="Breakdown of leave requests per department">
-          <ResponsiveContainer width="100%" height={220}>
-            <BarChart data={deptData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-              <XAxis dataKey="dept" tick={{ fontSize: 10, fill: '#94a3b8' }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fontSize: 11, fill: '#94a3b8' }} axisLine={false} tickLine={false} allowDecimals={false} />
-              <Tooltip content={<ChartTip />} />
-              <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 11 }} />
-              <Bar dataKey="approved" name="Approved" fill={C.emerald} radius={[4, 4, 0, 0]} stackId="a" />
-              <Bar dataKey="pending"  name="Pending"  fill={C.amber}   radius={[4, 4, 0, 0]} stackId="a" />
-              <Bar dataKey="rejected" name="Rejected" fill={C.rose}    radius={[4, 4, 0, 0]} stackId="a" />
-            </BarChart>
-          </ResponsiveContainer>
-        </ChartCard>
-      )}
+       {deptData.length > 0 && (
+         <ChartCard title="Leaves by Department" subtitle="Breakdown of leave requests per department">
+           <ResponsiveContainer width="100%" height={240}>
+             <BarChart data={deptData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
+               <CartesianGrid strokeDasharray="4 4" stroke="rgba(226, 232, 240, 0.3)" />
+               <XAxis dataKey="dept" tick={{ fontSize: 11, fill: '#64748b' }} axisLine={false} tickLine={false} />
+               <YAxis tick={{ fontSize: 11, fill: '#64748b' }} axisLine={false} tickLine={false} allowDecimals={false} />
+               <Tooltip content={<ChartTip />} />
+               <Legend iconType="circle" iconSize={10} wrapperStyle={{ fontSize: 12 }} verticalAlign="bottom" height={36} />
+               <Bar dataKey="approved" name="Approved" fill={C.emerald} radius={[6, 6, 0, 0]} stackId="a" />
+               <Bar dataKey="pending"  name="Pending"  fill={C.amber}   radius={[6, 6, 0, 0]} stackId="a" />
+               <Bar dataKey="rejected" name="Rejected" fill={C.rose}    radius={[6, 6, 0, 0]} stackId="a" />
+             </BarChart>
+           </ResponsiveContainer>
+         </ChartCard>
+       )}
     </div>
   )
 }
@@ -441,7 +444,7 @@ export default function Dashboard() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
         {statItems.map(p => <StatCard key={p.label} {...p} />)}
       </div>
 
@@ -450,67 +453,92 @@ export default function Dashboard() {
       {user?.role === 'hod'     && <HodDashboard     stats={stats} leaves={leaves} />}
       {['admin', 'principal'].includes(user?.role) && <AdminDashboard stats={stats} leaves={leaves} />}
 
-      {/* Recent Leaves */}
-      <div className="dashboard-glass-card rounded-2xl p-5">
-        <div className="flex items-center justify-between mb-5">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center shadow-lg">
-              <FileText size={20} className="text-white" />
-            </div>
-            <div>
-              <h2 className="text-lg font-bold text-slate-800">Recent Leave Requests</h2>
-              <p className="text-xs text-slate-500">Latest activity across the system</p>
-            </div>
-          </div>
-          <Link
-            to={user?.role === 'student' ? '/app/my-leaves' : '/app/approvals'}
-            className="text-sm text-primary-600 hover:text-primary-700 flex items-center gap-1 font-semibold"
-          >
-            View all <ChevronRight size={14} />
-          </Link>
-        </div>
+       {/* Recent Leaves */}
+       <div className="dashboard-glass-card rounded-3xl p-6">
+         <div className="flex items-center justify-between mb-6">
+           <div className="flex items-center gap-4">
+             <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center shadow-2xl">
+               <FileText size={24} className="text-white drop-shadow-lg" />
+             </div>
+             <div>
+               <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+                 Recent Leave Requests
+               </h2>
+               <p className="text-slate-400 text-sm mt-1">Latest activity across the system</p>
+             </div>
+           </div>
+           <Link
+             to={user?.role === 'student' ? '/app/my-leaves' : '/app/approvals'}
+             className="text-sm font-medium text-primary-600 hover:text-primary-700 flex items-center gap-2 transition-all duration-200"
+           >
+             View All Requests <ChevronRight size={16} className="transition-transform duration-200" />
+           </Link>
+         </div>
 
-        {recent.length === 0 ? (
-          <div className="text-center py-12">
-            <div className="w-20 h-20 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <FileText size={36} className="text-slate-300" />
-            </div>
-            <p className="text-slate-500 font-medium">No leave requests yet</p>
-            {user?.role === 'student' && (
-              <Link to="/app/apply" className="btn-primary mt-4 inline-flex">Apply for Leave</Link>
-            )}
-          </div>
-        ) : (
-          <div className="table-modern-wrapper">
-            <table className="table-modern">
-              <thead>
-                <tr>
-                  {['admin', 'hod', 'principal'].includes(user?.role) && <th className="px-4 py-3 text-left text-xs font-bold text-white uppercase tracking-wider bg-gradient-to-r from-indigo-500 to-purple-500">Student</th>}
-                  <th className="px-4 py-3 text-left text-xs font-bold text-white uppercase tracking-wider bg-gradient-to-r from-indigo-500 to-purple-500">Type</th>
-                  <th className="px-4 py-3 text-left text-xs font-bold text-white uppercase tracking-wider bg-gradient-to-r from-indigo-500 to-purple-500">From</th>
-                  <th className="px-4 py-3 text-left text-xs font-bold text-white uppercase tracking-wider bg-gradient-to-r from-indigo-500 to-purple-500">To</th>
-                  <th className="px-4 py-3 text-left text-xs font-bold text-white uppercase tracking-wider bg-gradient-to-r from-indigo-500 to-purple-500">Days</th>
-                  <th className="px-4 py-3 text-left text-xs font-bold text-white uppercase tracking-wider bg-gradient-to-r from-indigo-500 to-purple-500">Status</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {recent.map(l => (
-                  <tr key={l.id} className="hover:bg-indigo-50/30 transition-all duration-200">
-                    {['admin', 'hod', 'principal'].includes(user?.role) && (
-                      <td className="px-4 py-3 text-slate-700 text-sm font-semibold">{l.student?.firstName} {l.student?.lastName}</td>
-                    )}
-                    <td className="px-4 py-3 text-slate-600 text-sm">{l.leaveType}</td>
-                    <td className="px-4 py-3 text-slate-600 text-sm">{l.startDate}</td>
-                    <td className="px-4 py-3 text-slate-600 text-sm">{l.endDate}</td>
-                    <td className="px-4 py-3 text-slate-600 text-sm"><span className="bg-indigo-100 text-indigo-700 px-2 py-1 rounded-lg text-xs font-bold">{l.totalDays}d</span></td>
-                    <td className="px-4 py-3 text-slate-600 text-sm"><StatusBadge status={l.status} /></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
+         {recent.length === 0 ? (
+           <div className="text-center py-12">
+             <div className="w-24 h-24 bg-slate-100 rounded-3xl flex items-center justify-center mx-auto mb-5">
+               <FileText size={40} className="text-slate-300" />
+             </div>
+             <p className="text-slate-500 text-lg font-medium">No leave requests yet</p>
+             {user?.role === 'student' && (
+               <Link to="/app/apply" className="btn-primary mt-6 inline-flex px-8 py-3">
+                 Apply for Leave <PlusCircle size={18} className="ml-2" />
+               </Link>
+             )}
+           </div>
+         ) : (
+           <div className="table-modern-wrapper">
+             <table className="table-modern">
+               <thead>
+                 <tr>
+                   {['admin', 'hod', 'principal'].includes(user?.role) && (
+                     <th className="px-5 py-4 text-left text-base font-bold text-white uppercase tracking-wider bg-gradient-to-r from-indigo-500 to-purple-500 rounded-tl-xl">
+                       Student
+                     </th>
+                   )}
+                   <th className="px-5 py-4 text-left text-base font-bold text-white uppercase tracking-wider bg-gradient-to-r from-indigo-500 to-purple-500">
+                     Leave Type
+                   </th>
+                   <th className="px-5 py-4 text-left text-base font-bold text-white uppercase tracking-wider bg-gradient-to-r from-indigo-500 to-purple-500">
+                     Start Date
+                   </th>
+                   <th className="px-5 py-4 text-left text-base font-bold text-white uppercase tracking-wider bg-gradient-to-r from-indigo-500 to-purple-500">
+                     End Date
+                   </th>
+                   <th className="px-5 py-4 text-left text-base font-bold text-white uppercase tracking-wider bg-gradient-to-r from-indigo-500 to-purple-500">
+                     Duration
+                   </th>
+                   <th className="px-5 py-4 text-left text-base font-bold text-white uppercase tracking-wider bg-gradient-to-r from-indigo-500 to-purple-500 rounded-tr-xl">
+                     Status
+                   </th>
+                 </tr>
+               </thead>
+               <tbody className="divide-y divide-slate-100">
+                 {recent.map(l => (
+                   <tr key={l.id} className="hover:bg-indigo-50/30 transition-all duration-300 transform hover:scale-[1.01]">
+                     {['admin', 'hod', 'principal'].includes(user?.role) && (
+                       <td className="px-5 py-4 text-slate-800 text-base font-medium">{l.student?.firstName} {l.student?.lastName}</td>
+                     )}
+                     <td className="px-5 py-4 text-slate-700 text-base">{l.leaveType}</td>
+                     <td className="px-5 py-4 text-slate-700 text-base">{new Date(l.startDate).toLocaleDateString()}</td>
+                     <td className="px-5 py-4 text-slate-700 text-base">{new Date(l.endDate).toLocaleDateString()}</td>
+                     <td className="px-5 py-4 text-slate-700 text-base">
+                       <span className="flex items-center gap-2">
+                         <span className="w-2 h-2 rounded-full" style={{ backgroundColor: l.totalDays <= 1 ? '#10b981' : l.totalDays <= 3 ? '#f59e0b' : '#ef4444' }}></span>
+                         <span className="text-xs font-medium">{l.totalDays}d</span>
+                       </span>
+                     </td>
+                     <td className="px-5 py-4 text-slate-700 text-base">
+                       <StatusBadge status={l.status} className="px-3 py-1.5 text-xs font-medium" />
+                     </td>
+                   </tr>
+                 ))}
+               </tbody>
+             </table>
+           </div>
+         )}
+       </div>
 
       {/* Admin quick links */}
       {user?.role === 'admin' && (
