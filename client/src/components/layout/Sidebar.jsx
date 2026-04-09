@@ -8,47 +8,44 @@ import { useAuth } from '../../context/AuthContext'
 
 const NAV = {
   student: [
-    { to: '/app/dashboard',     icon: LayoutDashboard, label: 'Dashboard' },
-    { to: '/app/apply',         icon: FileText,         label: 'Apply Leave' },
-    { to: '/app/my-leaves',     icon: ListChecks,       label: 'My Leaves' },
-    { to: '/app/notifications', icon: Bell,             label: 'Notifications' },
-    { to: '/app/settings',      icon: Settings,         label: 'Settings' },
+    { to: '/app/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
+    { to: '/app/apply', icon: FileText, label: 'Apply' },
+    { to: '/app/my-leaves', icon: ListChecks, label: 'My Leaves' },
+    { to: '/app/notifications', icon: Bell, label: 'Alerts' },
+    { to: '/app/settings', icon: Settings, label: 'Settings' },
   ],
   hod: [
-    { to: '/app/dashboard',     icon: LayoutDashboard, label: 'Dashboard' },
-    { to: '/app/approvals',     icon: CheckSquare,      label: 'Approvals' },
-    { to: '/app/my-leaves',     icon: ListChecks,       label: 'All Leaves' },
-    { to: '/app/notifications', icon: Bell,             label: 'Notifications' },
-    { to: '/app/settings',      icon: Settings,         label: 'Settings' },
+    { to: '/app/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
+    { to: '/app/approvals', icon: CheckSquare, label: 'Approvals' },
+    { to: '/app/my-leaves', icon: ListChecks, label: 'All Leaves' },
+    { to: '/app/notifications', icon: Bell, label: 'Alerts' },
+    { to: '/app/settings', icon: Settings, label: 'Settings' },
   ],
   principal: [
-    { to: '/app/dashboard',     icon: LayoutDashboard, label: 'Dashboard' },
-    { to: '/app/approvals',     icon: CheckSquare,      label: 'Approvals' },
-    { to: '/app/my-leaves',     icon: ListChecks,       label: 'All Leaves' },
-    { to: '/app/notifications', icon: Bell,             label: 'Notifications' },
-    { to: '/app/settings',      icon: Settings,         label: 'Settings' },
+    { to: '/app/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
+    { to: '/app/approvals', icon: CheckSquare, label: 'Approvals' },
+    { to: '/app/my-leaves', icon: ListChecks, label: 'All Leaves' },
+    { to: '/app/notifications', icon: Bell, label: 'Alerts' },
+    { to: '/app/settings', icon: Settings, label: 'Settings' },
   ],
   admin: [
-    { to: '/app/dashboard',     icon: LayoutDashboard, label: 'Dashboard' },
-    { to: '/app/approvals',     icon: CheckSquare,      label: 'All Leaves' },
-    { to: '/app/users',         icon: Users,            label: 'Users' },
-    { to: '/app/departments',   icon: Building2,        label: 'Departments' },
-    { to: '/app/notifications', icon: Bell,             label: 'Notifications' },
-    { to: '/app/settings',      icon: Settings,         label: 'Settings' },
+    { to: '/app/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
+    { to: '/app/approvals', icon: CheckSquare, label: 'Leaves' },
+    { to: '/app/users', icon: Users, label: 'Users' },
+    { to: '/app/departments', icon: Building2, label: 'Depts' },
+    { to: '/app/notifications', icon: Bell, label: 'Alerts' },
   ],
 }
-
-const sidebarBg = {} // Left empty to use the sidebar-glass class on aside elements
 
 export default function Sidebar({ unreadCount = 0 }) {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
-  const [mobileOpen, setMobileOpen] = useState(false)
   const [collapsed, setCollapsed] = useState(false)
   const links = NAV[user?.role] || NAV.student
 
   function handleLogout() { logout(); navigate('/') }
 
+  // ── Desktop Sidebar Content ────────────────────────────────────────────
   const SidebarContent = ({ mini }) => (
     <div className="flex flex-col h-full">
       {/* Logo + collapse toggle */}
@@ -57,7 +54,7 @@ export default function Sidebar({ unreadCount = 0 }) {
           <div className="flex items-center gap-3 flex-1 min-w-0">
             <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden"
               style={{ background: 'linear-gradient(135deg,#6366f1,#8b5cf6)', boxShadow: '0 0 16px rgba(99,102,241,0.5)' }}>
-              <img src="/logo.jpg" alt="logo" className="w-full h-full object-cover" onError={e => { e.target.style.display='none'; e.target.nextSibling.style.display='flex' }} />
+              <img src="/logo.jpg" alt="logo" className="w-full h-full object-cover" onError={e => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex' }} />
               <GraduationCap size={20} className="text-white hidden" />
             </div>
             <div className="min-w-0">
@@ -69,7 +66,7 @@ export default function Sidebar({ unreadCount = 0 }) {
         {mini && (
           <div className="w-9 h-9 rounded-xl flex items-center justify-center overflow-hidden"
             style={{ background: 'linear-gradient(135deg,#6366f1,#8b5cf6)' }}>
-            <img src="/logo.jpg" alt="logo" className="w-full h-full object-cover" onError={e => { e.target.style.display='none' }} />
+            <img src="/logo.jpg" alt="logo" className="w-full h-full object-cover" onError={e => { e.target.style.display = 'none' }} />
           </div>
         )}
         <button
@@ -118,24 +115,22 @@ export default function Sidebar({ unreadCount = 0 }) {
           <NavLink
             key={to}
             to={to}
-            onClick={() => setMobileOpen(false)}
             title={mini ? label : undefined}
             className={({ isActive }) =>
-              `sidebar-nav-item relative flex items-center gap-3 rounded-xl text-sm font-medium transition-all duration-200 ${mini ? 'justify-center px-2 py-2.5' : 'px-3 py-2.5'} ${
-                isActive
-                  ? 'sidebar-active-glow text-white shadow-xl'
-                  : 'text-white/50 hover:text-white/90 hover:bg-white/5'
+              `sidebar-nav-item relative flex items-center gap-3 rounded-xl text-sm font-medium transition-all duration-200 ${mini ? 'justify-center px-2 py-2.5' : 'px-3 py-2.5'} ${isActive
+                ? 'sidebar-active-glow text-white shadow-xl'
+                : 'text-white/50 hover:text-white/90 hover:bg-white/5'
               }`
             }
           >
             <Icon size={17} className="flex-shrink-0" />
             {!mini && <span className="flex-1">{label}</span>}
-            {!mini && label === 'Notifications' && unreadCount > 0 && (
+            {!mini && label === 'Alerts' && unreadCount > 0 && (
               <span className="text-xs font-bold w-5 h-5 flex items-center justify-center text-white bg-red-500 rounded-full shadow-md">
                 {unreadCount > 9 ? '9+' : unreadCount}
               </span>
             )}
-            {mini && label === 'Notifications' && unreadCount > 0 && (
+            {mini && label === 'Alerts' && unreadCount > 0 && (
               <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-red-500 shadow-md" />
             )}
           </NavLink>
@@ -158,27 +153,38 @@ export default function Sidebar({ unreadCount = 0 }) {
 
   return (
     <>
-      {/* Mobile toggle button */}
-      <button
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-slate-900 rounded-xl shadow-lg border border-white/10"
-        onClick={() => setMobileOpen(!mobileOpen)}
-      >
-        {mobileOpen ? <X size={20} className="text-white" /> : <Menu size={20} className="text-white" />}
-      </button>
+      {/* ── Mobile Bottom Navigation Bar ── */}
+      <nav className="mobile-bottom-nav lg:hidden">
+        {links.map(({ to, icon: Icon, label }) => (
+          <NavLink
+            key={to}
+            to={to}
+            className={({ isActive }) =>
+              `mobile-bottom-nav-item ${isActive ? 'mobile-bottom-nav-item--active' : ''}`
+            }
+          >
+            <div className="mobile-bottom-nav-icon-wrap">
+              <Icon size={20} />
+              {label === 'Alerts' && unreadCount > 0 && (
+                <span className="mobile-bottom-nav-badge">
+                  {unreadCount > 9 ? '9+' : unreadCount}
+                </span>
+              )}
+            </div>
+            <span className="mobile-bottom-nav-label">{label}</span>
+          </NavLink>
+        ))}
 
-      {/* Mobile overlay */}
-      {mobileOpen && (
-        <div className="lg:hidden fixed inset-0 bg-black/50 z-40 backdrop-blur-sm" onClick={() => setMobileOpen(false)} />
-      )}
+        {/* Logout at end */}
+        <button onClick={handleLogout} className="mobile-bottom-nav-item mobile-bottom-nav-item--logout">
+          <div className="mobile-bottom-nav-icon-wrap">
+            <LogOut size={20} />
+          </div>
+          <span className="mobile-bottom-nav-label">Logout</span>
+        </button>
+      </nav>
 
-      {/* Mobile sidebar */}
-      <aside
-        className={`lg:hidden fixed left-0 top-0 h-full w-64 z-50 shadow-2xl transition-transform duration-300 sidebar-glass ${mobileOpen ? 'translate-x-0' : '-translate-x-full'}`}
-      >
-        <SidebarContent mini={false} />
-      </aside>
-
-      {/* Desktop sidebar — collapsible */}
+      {/* ── Desktop Sidebar — collapsible ── */}
       <aside
         className={`hidden lg:flex flex-col h-screen sticky top-0 flex-shrink-0 transition-all duration-300 sidebar-glass ${collapsed ? 'w-16' : 'w-64'}`}
       >

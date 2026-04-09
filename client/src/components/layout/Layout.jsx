@@ -14,7 +14,7 @@ export default function Layout() {
     try {
       const res = await api.get('/notifications')
       setUnreadCount(res.data.filter(n => !n.isRead).length)
-    } catch {}
+    } catch { }
   }
 
   useEffect(() => { fetchUnread() }, [])
@@ -38,8 +38,9 @@ export default function Layout() {
     <div className="flex min-h-screen dashboard-layout-bg text-slate-800">
       <Toaster position="top-right" />
       <Sidebar unreadCount={unreadCount} />
-      <main className="flex-1 min-w-0 overflow-auto">
-        <div className="p-6 lg:p-8 max-w-7xl mx-auto animate-fade-in relative z-10">
+      {/* pb-20 on mobile creates space above the fixed bottom nav bar */}
+      <main className="flex-1 min-w-0 overflow-auto pb-20 lg:pb-0">
+        <div className="p-4 lg:p-8 max-w-7xl mx-auto animate-fade-in relative z-10">
           <Outlet context={{ refreshUnread: fetchUnread }} />
         </div>
       </main>
