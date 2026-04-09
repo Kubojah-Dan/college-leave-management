@@ -180,15 +180,15 @@ export default function Settings() {
 
       {/* Leave Types (admin only) */}
       {user?.role === 'admin' && (
-        <div className="dashboard-glass-card space-y-4">
+        <div className="dashboard-glass-card rounded-3xl p-6 space-y-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center">
-                <SettingsIcon size={16} className="text-white" />
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center shadow-md flex-shrink-0">
+                <SettingsIcon size={18} className="text-white" />
               </div>
-              <h2 className="font-bold text-slate-800">Leave Types</h2>
+              <h2 className="font-bold text-slate-800 text-base">Leave Types</h2>
             </div>
-            <button className="btn-primary btn-sm" onClick={openCreate}><Plus size={14} />Add Type</button>
+            <button className="btn-primary btn-sm flex-shrink-0" onClick={openCreate}><Plus size={14} />Add Type</button>
           </div>
           <div className="space-y-2">
             {leaveTypes.map(lt => (
