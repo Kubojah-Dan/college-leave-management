@@ -34,6 +34,7 @@ const NAV = {
     { to: '/app/users', icon: Users, label: 'Users' },
     { to: '/app/departments', icon: Building2, label: 'Depts' },
     { to: '/app/notifications', icon: Bell, label: 'Alerts' },
+    { to: '/app/settings', icon: Settings, label: 'Settings' },
   ],
 }
 
